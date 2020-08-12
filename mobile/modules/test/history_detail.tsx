@@ -33,9 +33,9 @@ export default function TestHistory_detail(props: any): any {
   const imageView = useRef<ViewShot>(null)
 
   useEffect(() => {
+    console.log(result)
     userLoad().then((user: any) => {
       console.log(user);
-      
       setUser(user)
       getDetail()
     })
@@ -47,12 +47,11 @@ export default function TestHistory_detail(props: any): any {
     MediaLibrary.requestPermissionsAsync()
     imageView.current!.capture().then((images: string) => {
       let img = '<img src = "' + images + '" >'
-      let name = '<p>Nama : '+user.nama_lengkap+'</p>'
-      let jekel = '<p>Jenis Kelamin : '+user.jenis_kelamin+'</p>'
-      let email = '<p>Email : '+user.email+'</p>'
-      console.log(name);
-      
-      Print.printAsync({ html: name + jekel + email + img + data.html })
+      let detail = "<table><tr><td>Nama</td><td>:</td><td>" + user.nama_lengkap
+        + "</td></tr><tr><td>Email</td><td>:</td><td>" + user.email
+        + "</td></tr><tr><td>Jenis Kelamin</td><td>:</td><td>" + user.jenis_kelamin + "</td></tr></table>"
+
+      Print.printAsync({ html: detail + img + data.html })
     })
   }
 
@@ -123,19 +122,22 @@ export default function TestHistory_detail(props: any): any {
                     })
                   }
                 </View>
-                <View style={{ backgroundColor: 'white', borderRadius: 5, padding: 10, marginTop: 10, elevation: 3 }} >
-                  <Text>{"Pengembangan yang tepat sesuai dengan kepribadian anda:"}</Text>
-                  {
-                    data && data.detail && data.saran_pengembangan.length > 0 && data.saran_pengembangan.map((item: any, i: number) => {
-                      return (
-                        <View key={i} style={{ flexDirection: 'row', alignItems: 'flex-start', padding: 5 }} >
-                          <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: 'grey', marginTop: 5 }} />
-                          <Text style={{ paddingLeft: 10, fontSize: 14 }} >{item}</Text>
-                        </View>
-                      )
-                    })
-                  }
-                </View>
+                {
+                  data && data.detail && data.saran_pengembangan.length > 0 && data.saran_pengembangan != false &&
+                  <View style={{ backgroundColor: 'white', borderRadius: 5, padding: 10, marginTop: 10, elevation: 3 }} >
+                    <Text>{"Pengembangan yang tepat sesuai dengan kepribadian anda:"}</Text>
+                    {
+                      data && data.detail && data.saran_pengembangan.length > 0 && data.saran_pengembangan.map((item: any, i: number) => {
+                        return (
+                          <View key={i} style={{ flexDirection: 'row', alignItems: 'flex-start', padding: 5 }} >
+                            <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: 'grey', marginTop: 5 }} />
+                            <Text style={{ paddingLeft: 10, fontSize: 14 }} >{item}</Text>
+                          </View>
+                        )
+                      })
+                    }
+                  </View>
+                }
                 <View style={{ backgroundColor: 'white', borderRadius: 5, padding: 10, marginTop: 10, elevation: 3 }} >
                   <Text>{"Saran profesi untuk kepribadian anda:"}</Text>
                   <Text>{data.saran_profesi}</Text>

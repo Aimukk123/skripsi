@@ -12,11 +12,13 @@ export default function UserRegister(props: any): any {
   moment.locale('id')
 
   const [showPassword, setShowPassword] = useSafeState(false)
+  const [showConfirmPassword, setConfirmShowPassword] = useSafeState(false)
 
   const [inputanNama, setIputanNama] = useSafeState('')
   const [inputanEmail, setIputanEmail] = useSafeState('')
   const [inputanUsername, setIputanUsername] = useSafeState('')
   const [inputanPassword, setIputanPassword] = useSafeState('')
+  const [inputanPassword2, setIputanPassword2] = useSafeState('')
   const [showLoading, setShowLoading] = useSafeState(false)
   const [date, setDate] = useSafeState('')
   const [currentDate, setCurrentDate] = useSafeState(new Date())
@@ -28,8 +30,11 @@ export default function UserRegister(props: any): any {
   const inputEmail = useRef<TextInput>(null)
   const inputUsername = useRef<TextInput>(null)
   const inputPassword = useRef<TextInput>(null)
+  const inputPassword2 = useRef<TextInput>(null)
 
   function cekInputan() {
+    let emailCheck = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    
     if (inputanNama == '') {
       Alert.alert('Peringatan', 'Nama Harus Diisi')
       inputName.current!.focus()
@@ -37,6 +42,11 @@ export default function UserRegister(props: any): any {
     }
     if (inputanEmail == '') {
       Alert.alert('Peringatan', 'Email Harus Diisi')
+      inputEmail.current!.focus()
+      return
+    }
+    if (!emailCheck.test(inputanEmail)) {
+      Alert.alert('Peringatan', 'Email Tidak Valid')
       inputEmail.current!.focus()
       return
     }
@@ -48,6 +58,21 @@ export default function UserRegister(props: any): any {
     if (inputanPassword == '') {
       Alert.alert('Peringatan', 'Password Harus Diisi')
       inputPassword.current!.focus()
+      return
+    }
+    if (inputanPassword.length < 8 ) {
+      Alert.alert('Peringatan', 'Password terdiri minimal 8 karakter')
+      inputPassword.current!.focus()
+      return
+    }
+    if (inputanPassword2 == '') {
+      Alert.alert('Peringatan', 'Konfirmasi Password Harus Diisi')
+      inputPassword2.current!.focus()
+      return
+    }
+    if (inputanPassword2 != inputanPassword) {
+      Alert.alert('Peringatan', 'Password anda tidak sesuai')
+      inputPassword2.current!.focus()
       return
     }
     if (jekel == '') {
@@ -101,7 +126,7 @@ export default function UserRegister(props: any): any {
                 keyboardType="default"
                 autoCapitalize={'words'}
                 returnKeyType="next"
-                onSubmitEditing={() => { inputPassword.current!.focus() }}
+                onSubmitEditing={() => { inputEmail.current!.focus() }}
                 onChangeText={(text) => { setIputanNama(text) }}
                 style={{ flex: 1, paddingLeft: 7, color: '#706f74' }}
               />
@@ -141,12 +166,29 @@ export default function UserRegister(props: any): any {
                 autoCapitalize="none"
                 secureTextEntry={!showPassword}
                 returnKeyType="next"
-                onSubmitEditing={() => { inputPassword.current!.blur() }}
+                onSubmitEditing={() => { inputPassword2.current!.focus() }}
                 onChangeText={(text) => { setIputanPassword(text) }}
                 style={{ flex: 1, paddingLeft: 7, color: '#706f74' }}
               />
               <TouchableOpacity onPress={() => { setShowPassword(!showPassword) }}>
                 <Icon name={showPassword == true ? "eye-outline" : "eye-off-outline"} color="#5E8FF5" size={20} type='material-community' />
+              </TouchableOpacity>
+            </View>
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop: 15, marginHorizontal: 20, paddingHorizontal: 10/* , color: '#5E8FF5' */, backgroundColor: '#E7EFFE', height: 40, borderRadius: 20 }}>
+              <Icon name={"lock-outline"} color="#5E8FF5" type='material-community' size={20} />
+              <TextInput
+                ref={inputPassword2}
+                autoCompleteType={"off"}
+                placeholder="Password Confirm"
+                autoCapitalize="none"
+                secureTextEntry={!showConfirmPassword}
+                returnKeyType="next"
+                onSubmitEditing={() => { inputPassword2.current!.blur() }}
+                onChangeText={(text) => { setIputanPassword2(text) }}
+                style={{ flex: 1, paddingLeft: 7, color: '#706f74' }}
+              />
+              <TouchableOpacity onPress={() => { setConfirmShowPassword(!showConfirmPassword) }}>
+                <Icon name={showConfirmPassword == true ? "eye-outline" : "eye-off-outline"} color="#5E8FF5" size={20} type='material-community' />
               </TouchableOpacity>
             </View>
             <View style={{ marginHorizontal: 20 }}>

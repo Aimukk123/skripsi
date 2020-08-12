@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { View, Text, Alert, StatusBar, KeyboardAvoidingView, ScrollView, Image, TextInput, TouchableOpacity } from 'react-native';
 import useSafeState from '../../state'
 import ComponentLoading_small from '../component/loading_small';
@@ -7,8 +7,8 @@ import LibCurl from '../lib/curl';
 import { userSave } from '../../user';
 
 export default function UserLogin(props: any): any {
-  let inputEmail = ""
-  let inputPassword = ""
+  let inputEmail = useRef<TextInput>(null)
+  let inputPassword = useRef<TextInput>(null)
 
   const [inputanEmail, setIputanEmail] = useSafeState('')
   const [inputanPassword, setIputanPassword] = useSafeState('')
@@ -18,10 +18,12 @@ export default function UserLogin(props: any): any {
   function cekInput() {
     if (inputanEmail == '') {
       Alert.alert('Peringatan', 'Silahkan masukkan email Anda')
+      inputEmail.current!.focus()
       return
     }
     if (inputanPassword == '') {
       Alert.alert('Peringatan', 'Silahkan masukkan password Anda')
+      inputPassword.current!.focus()
       return
     }
     login(inputanEmail, inputanPassword)
@@ -49,30 +51,34 @@ export default function UserLogin(props: any): any {
   }
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#5E8FF5', paddingTop: StatusBar.currentHeight }}>
-      {
-        showLoading ? <ComponentLoading_small /> : null
-      }
-      <KeyboardAvoidingView behavior='padding' style={{ flex: 1 }}>
+    <KeyboardAvoidingView behavior='padding' enabled style={{ flex: 1, height: "100%" }}>
+      <View style={{ flex: 1, backgroundColor: '#5E8FF5', paddingTop: StatusBar.currentHeight }}>
+        {
+          showLoading ? <ComponentLoading_small /> : null
+        }
         <ScrollView removeClippedSubviews={false}>
           <View style={{ backgroundColor: "white", marginHorizontal: 20, marginTop: 100, borderRadius: 10 }}>
             <Image source={require('../../assets/login.png')} style={{ width: 100, height: 100, alignSelf: 'center', marginTop: -50 }} />
             <Text style={{ paddingTop: 30, fontSize: 16, fontWeight: "normal", fontStyle: "normal", letterSpacing: 0, textAlign: "center", color: "#706f74" }}>LOGIN</Text>
             <Text style={{ paddingTop: 5, fontSize: 14, fontWeight: "normal", fontStyle: "normal", letterSpacing: 0, textAlign: "center", color: "#706f74" }}>Selamat Datang Di Aplikasi Test Kepribadian</Text>
             <TextInput
+              ref={inputEmail}
               autoCompleteType={"off"}
               placeholder="Email"
               onChangeText={(text) => { setIputanEmail(text) }}
               returnKeyType='next'
+              onSubmitEditing={() => inputPassword.current!.focus()}
               style={{ marginTop: 15, marginHorizontal: 20, paddingHorizontal: 20, color: '#5E8FF5', backgroundColor: '#E7EFFE', height: 40, borderRadius: 20 }}
             />
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop: 15, marginHorizontal: 20, paddingHorizontal: 20,/*  color: '#5E8FF5', */ backgroundColor: '#E7EFFE', height: 40, borderRadius: 20 }}>
               <TextInput
+                ref={inputPassword}
                 autoCompleteType={"off"}
                 returnKeyType={"go"}
                 placeholder="Password"
                 secureTextEntry={!showPassword}
                 onChangeText={(text) => { setIputanPassword(text) }}
+                onSubmitEditing={() => cekInput()}
                 style={{ flex: 1, color: '#5E8FF5', backgroundColor: '#E7EFFE' }}
               />
               <TouchableOpacity onPress={() => { setShowPassword(!showPassword) }}>
@@ -93,7 +99,7 @@ export default function UserLogin(props: any): any {
             <Text style={{ fontSize: 14, fontWeight: "normal", fontStyle: "normal", letterSpacing: 0, textAlign: "center", color: "white" }}>REGISTER</Text>
           </TouchableOpacity>
         </ScrollView>
-      </KeyboardAvoidingView>
-    </View>
+      </View>
+    </KeyboardAvoidingView>
   )
 }

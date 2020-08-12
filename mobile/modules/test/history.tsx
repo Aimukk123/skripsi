@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Alert, Dimensions } from 'react-native';
 import moment from 'moment/min/moment-with-locales'
 import useSafeState from '../../state'
 import ComponentLoading from '../component/loading';
@@ -14,6 +14,7 @@ export default function TestHistory(props: any): any {
 
   const [result, setResult] = useSafeState()
   const [id, setId] = useSafeState(0)
+  const height = Dimensions.get("screen").height
 
   useEffect(() => {
     userLoad().then((us: any) => {
@@ -60,9 +61,9 @@ export default function TestHistory(props: any): any {
               }
               {
                 result.length < 1 &&
-                < View style={{ marginHorizontal: 20, alignItems: 'center', justifyContent: 'center' }}>
-                  <Text style={{ fontSize: 12, fontStyle: 'normal', textAlign: 'center', color: '#757575' }} >Riwayat Test Anda Akan Muncul Disini</Text>
-                  <Text style={{ fontSize: 12, fontStyle: 'normal', textAlign: 'center', color: '#757575' }} >Saat ini Anda Belum Melakukan Test</Text>
+                < View style={{ marginHorizontal: 20, alignItems: 'center', justifyContent: 'center', marginTop: height * 0.3 }}>
+                  <Text style={{ marginBottom: 10, fontSize: 14, fontStyle: 'normal', textAlign: 'center', color: '#757575' }} >Riwayat Test Anda Akan Ditampilkan Disini</Text>
+                  <Text style={{ fontSize: 14, fontStyle: 'normal', textAlign: 'center', color: '#757575' }} >Saat ini Anda Belum Melakukan Test</Text>
                 </View>
               }
             </View>

@@ -1,13 +1,15 @@
 <?php 
 error_reporting(0);
 include '../config/koneksi.php';
+$id_jenis = $_GET['id_jenis'];
+
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 
   <head>
-    <title>User Manager</title>
+    <title>Detail</title>
     <?php include 'head.php' ?>
   </head>
 
@@ -28,7 +30,7 @@ include '../config/koneksi.php';
             <li class="breadcrumb-item">
               <a href="#">Dashboard</a>
             </li>
-            <li class="breadcrumb-item active">User</li>
+            <li class="breadcrumb-item active">Detail Tes</li>
           </ol>
 
           <!-- DataTables Example -->
@@ -41,40 +43,44 @@ include '../config/koneksi.php';
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                   <thead>
                     <tr>
-                      <th>Nama Lengkap</th>
-                      <th>Email</th>
-                      <th>Username</th>
-                      <th>Password</th>
-                      <th>Jenis Kelamin</th>
-                      <th>Tanggal Lahir</th>
+                      <th>Jenis Tes</th>
+                      <th>Nama Kepribadian</th>
+                      <th>Detail</th>
+                      <th>Saran Pengembangan</th>
+                      <th>Saran Profesi</th>
                       <th>Aksi</th>
                     </tr>
                   </thead>
                   <tfoot>
                     <tr>
-                      <th>Nama Lengkap</th>
-                      <th>Email</th>
-                      <th>Username</th>
-                      <th>Password</th>
-                      <th>Jenis Kelamin</th>
-                      <th>Tanggal Lahir</th>
+                      <th>Jenis Tes</th>
+                      <th>Nama Kepribadian</th>
+                      <th>Detail</th>
+                      <th>Saran Pengembangan</th>
+                      <th>Saran Profesi</th>
                       <th>Aksi</th>
                     </tr>
                   </tfoot>
                   <tbody>
                     <?php 
-                    $query = mysqli_query($conn, "SELECT `id_user`, `nama_lengkap`, `email`, `username`, `password`, `jekel`, `tanggal_lahir` FROM `user`");
+                    $query = mysqli_query($conn, "SELECT `id_jenis_kepribadian`,`jenis_test`, `nama_kepribadian`, `detail`, `saran_pengembangan`, `saran_profesi` FROM `jenis_kepribadian` WHERE `id_jenis` = '$id_jenis' ");
                     while ($data = mysqli_fetch_array($query)) {
                     ?>
                     <tr>
-                      <td><?php echo $data['nama_lengkap']; ?></td>
-                      <td><?php echo $data['email']; ?></td>
-                      <td><?php echo $data['username']; ?></td>
-                      <td>*******</td>
-                      <td><?php echo $data['jekel']; ?></td>
-                      <td><?php echo $data['tanggal_lahir']; ?></td>
+                      <td><?php echo $data['jenis_test']; ?></td>
+                      <td><?php echo $data['nama_kepribadian']; ?></td>
                       <td>
-                        <a onclick="deleteConfirm('index.php')" href="#!" class="btn btn-small text-danger"><i class="fas fa-trash"></i> Hapus</a>
+                        <?php
+                          $d = unserialize($data['detail']);
+                          for ($i=0; $i <count($d) ; $i++) { 
+                            echo $d[$i]."<br/>";
+                          }
+                        ?>
+                      </td>
+                      <td><?php echo $data['saran_pengembangan']; ?></td>
+                      <td><?php echo $data['saran_profesi']; ?></td>
+                      <td>
+                        <!-- <a onclick="deleteConfirm('index.php')" href="#!" class="btn btn-small text-danger"><i class="fas fa-trash"></i> Hapus</a> -->
                       </td>
                     </tr>
                     <?php

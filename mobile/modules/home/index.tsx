@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Alert } from 'react-native';
 import useSafeState from '../../state'
 import { userLoad } from '../../user';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -7,6 +7,9 @@ import { Icon } from 'react-native-elements';
 import UserProfile from '../user/profile';
 import TestHistory from '../test/history';
 import HomeDashboard from './dashboard';
+import * as Updates from 'expo-updates';
+
+const AppJson = require('../../app.json')
 
 export default function HomeIndex(props: any): any {
   const [activeTab, setActiveTab] = useSafeState(0)
@@ -16,7 +19,23 @@ export default function HomeIndex(props: any): any {
     userLoad().then((user) => {
       setUserData(user)
     })
+    checkUpdates()
   }, [])
+
+  function checkUpdates() {
+    if (AppJson.expo.updates.enabled == true) {
+      Updates.fetchUpdateAsync().then((v) => {
+        if (v.isNew) {
+          Alert.alert("Alert", "Berhasil Di Update", [{
+            onPress: () => {
+              Updates.reloadAsync()
+            },
+            text: 'Ok'
+          }], { cancelable: false })
+        }
+      })
+    }
+  }
 
   function getTabView() {
     if (activeTab == 0) {

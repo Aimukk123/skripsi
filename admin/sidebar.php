@@ -17,12 +17,12 @@ include '../config/koneksi.php';
           </a>
           <div class="dropdown-menu" aria-labelledby="pagesDropdown">
           <?php
-          $query = mysqli_query($conn, "SELECT `nama_test` FROM `jenis_test`");
+          $query = mysqli_query($conn, "SELECT `id_jenis`,`nama_test` FROM `jenis_test`");
           while ($d = mysqli_fetch_array($query)) {
           ?>
             <h6 class="dropdown-header" style="text-overflow: ellipsis;overflow: hidden;white-space: nowrap;" ><?php echo $d['nama_test']; ?></h6>
-            <a class="dropdown-item" href="" style="text-overflow: ellipsis;overflow: hidden;white-space: nowrap;">Tes Kepribadian</a>
-            <a class="dropdown-item" href="" style="text-overflow: ellipsis;overflow: hidden;white-space: nowrap;">Detail Kepribadian</a>
+            <a class="dropdown-item" href="test.php?id_jenis=<?php echo $d['id_jenis'] ?>" style="text-overflow: ellipsis;overflow: hidden;white-space: nowrap;">Tes Kepribadian</a>
+            <a class="dropdown-item" href="detail.php?id_jenis=<?php echo $d['id_jenis'] ?>" style="text-overflow: ellipsis;overflow: hidden;white-space: nowrap;">Detail Kepribadian</a>
             <div class="dropdown-divider"></div>
           <?php
           }
